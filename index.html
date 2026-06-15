@@ -2477,3 +2477,70 @@ function exportSuppliersPDF() { showToast('Generating suppliers PDF…'); }
 function exportSuppliersExcel() { const wb=XLSX.utils.book_new(); const data=[['Name','Type','Total Purchases','Paid','Payable'],...db.suppliers.map(s=>{ const b=getSupplierBalance(s.id); return [s.name,s.type,b.purchases,b.paid,b.balance]; })]; XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(data),'Suppliers'); XLSX.writeFile(wb,'Suppliers_Report.xlsx'); showToast('Excel exported'); }
 function exportProductionPDF() { showToast('Generating production PDF…'); }
 function exportProductionExcel() { const wb=XLSX.utils.book_new(); const data=[['Batch ID','Product','Date','Qty','Fabric Cost','
+                                                                                Acc Cost','Other Cost','Total Cost','Cost/Unit','Status'],...db.production.map(b=>[b.batchId,b.product,b.date,b.qty,b.fabricCost,b.accCost,b.otherCost,b.totalCost,b.costPerUnit,b.status])]; XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(data),'Production'); XLSX.writeFile(wb,'Production_Report.xlsx'); showToast('Excel exported'); }
+
+function exportExpensesPDF() { showToast('Generating expenses PDF…'); }
+function exportExpensesExcel() { 
+  const wb=XLSX.utils.book_new(); 
+  const data=[['Date','Category','Type','Amount','Description','Production ID'],...db.expenses.map(e=>[e.date,e.category,e.type,e.amount,e.description||'',e.batchId||''])]; 
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(data),'Expenses'); 
+  XLSX.writeFile(wb,'Expenses_Report.xlsx'); 
+  showToast('Excel exported'); 
+}
+
+function exportChequesPDF() { showToast('Generating cheques PDF…'); }
+function exportChequesExcel() { 
+  const wb=XLSX.utils.book_new(); 
+  const data=[['Cheque No.','Type','Party','Bank','Amount','Issue Date','Due Date','Status'],...db.cheques.map(c=>[c.chequeNo,c.type,c.party,c.bank,c.amount,c.issueDate,c.dueDate,c.status])]; 
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(data),'Cheques'); 
+  XLSX.writeFile(wb,'Cheques_Report.xlsx'); 
+  showToast('Excel exported'); 
+}
+
+function exportStaffPDF() { showToast('Generating staff PDF…'); }
+function exportStaffExcel() { 
+  const wb=XLSX.utils.book_new(); 
+  const data=[['Name','Designation','Monthly Salary','Contact','Join Date','Status'],...db.staff.map(s=>[s.name,s.designation,s.salary,s.contact||'',s.joinDate||'','Active'])]; 
+  XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(data),'Staff'); 
+  XLSX.writeFile(wb,'Staff_Report.xlsx'); 
+  showToast('Excel exported'); 
+}
+
+// ===================== INITIALIZATION =====================
+window.addEventListener('DOMContentLoaded', () => {
+  // Load local data
+  loadDB();
+  
+  // Apply saved theme
+  if (db.settings && db.settings.theme === 'dark') {
+    setTheme('dark');
+  }
+
+  // Live Date/Time Badge
+  const updateTime = () => {
+    const d = new Date();
+    document.getElementById('liveDateBadge').textContent = d.toLocaleDateString('en-GB', { weekday: 'short', day: '2-digit', month: 'short' }) + ' · ' + d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
+  updateTime();
+  setInterval(updateTime, 60000);
+
+  // Initial navigation setup
+  navTo('dashboard', document.querySelector('.nav-item.active'));
+
+  // Hide loading screen after artificial delay for smooth entry
+  setTimeout(() => {
+    document.getElementById('loadScreen').classList.add('hide');
+  }, 1200);
+});
+
+// Close modals when clicking outside the box
+window.onclick = function(event) {
+  if (event.target.classList.contains('modal-overlay')) {
+    event.target.classList.remove('open');
+  }
+}
+</script>
+</body>
+</html>
+
+                                                                               
