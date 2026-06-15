@@ -2476,8 +2476,17 @@ function exportCustomersExcel() { const wb=XLSX.utils.book_new(); const data=[['
 function exportSuppliersPDF() { showToast('Generating suppliers PDF…'); }
 function exportSuppliersExcel() { const wb=XLSX.utils.book_new(); const data=[['Name','Type','Total Purchases','Paid','Payable'],...db.suppliers.map(s=>{ const b=getSupplierBalance(s.id); return [s.name,s.type,b.purchases,b.paid,b.balance]; })]; XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(data),'Suppliers'); XLSX.writeFile(wb,'Suppliers_Report.xlsx'); showToast('Excel exported'); }
 function exportProductionPDF() { showToast('Generating production PDF…'); }
-function exportProductionExcel() { const wb=XLSX.utils.book_new(); const data=[['Batch ID','Product','Date','Qty','Fabric Cost','
-                                                                                Acc Cost','Other Cost','Total Cost','Cost/Unit','Status'],...db.production.map(b=>[b.batchId,b.product,b.date,b.qty,b.fabricCost,b.accCost,b.otherCost,b.totalCost,b.costPerUnit,b.status])]; XLSX.utils.book_append_sheet(wb,XLSX.utils.aoa_to_sheet(data),'Production'); XLSX.writeFile(wb,'Production_Report.xlsx'); showToast('Excel exported'); }
+function exportProductionExcel() { 
+  const wb = XLSX.utils.book_new(); 
+  const data = [
+    ['Batch ID','Product','Date','Qty','Fabric Cost','Acc Cost','Other Cost','Total Cost','Cost/Unit','Status'],
+    ...db.production.map(b => [b.batchId, b.product, b.date, b.qty, b.fabricCost, b.accCost, b.otherCost, b.totalCost, b.costPerUnit, b.status])
+  ]; 
+  XLSX.utils.book_append_sheet(wb, XLSX.utils.aoa_to_sheet(data), 'Production'); 
+  XLSX.writeFile(wb, 'Production_Report.xlsx'); 
+  showToast('Excel exported'); 
+}
+
 
 function exportExpensesPDF() { showToast('Generating expenses PDF…'); }
 function exportExpensesExcel() { 
